@@ -1,5 +1,5 @@
 <?php
-// /public/index.php
+// /public/index.php (Versão super simplificada)
 
 // Configurações
 header('Access-Control-Allow-Origin: *');
@@ -21,119 +21,173 @@ require_once __DIR__ . '/../api/controllers/UserController.php';
 require_once __DIR__ . '/../api/controllers/EmployeeController.php';
 require_once __DIR__ . '/../api/middlewares/AuthMiddleware.php';
 
-// Obter método e URI da requisição
+// Obter a URI da requisição
+$request_uri = $_SERVER['REQUEST_URI'];
+
+// Remover query string se existir
+if (($pos = strpos($request_uri, '?')) !== false) {
+    $request_uri = substr($request_uri, 0, $pos);
+}
+
+// Normalizar a URI
+$request_uri = trim($request_uri, '/');
+
+// Se estiver acessando pela pasta public, ajustar
+if (strpos($request_uri, 'public/') === 0) {
+    $request_uri = substr($request_uri, 7); // Remove "public/"
+}
+
+if (strpos($request_uri, 'backend/public/') === 0) {
+    $request_uri = substr($request_uri, 15); // Remove "backend/public/"
+}
+
+if (strpos($request_uri, 'pontodigital/backend/public/') === 0) {
+    $request_uri = substr($request_uri, 28); // Remove "pontodigital/backend/public/"
+}
+
+// Dividir a URI em partes
+$uri_parts = explode('/', $request_uri);
+// var_dump($uri_parts);
+$resource = $uri_parts[2] ?? '';
+$action = $uri_parts[3] ?? '';
+$id = $uri_parts[4] ?? null;
+
+// Debug (remova em produção)
+error_log("REQUEST_URI: " . $_SERVER['REQUEST_URI']);
+error_log("Processed URI: $request_uri");
+error_log("Resource: $resource");
+error_log("Action: $action");
+error_log("ID: " . ($id ?: 'null'));
+
+// Método HTTP
 $method = $_SERVER['REQUEST_METHOD'];
-$uri = $_SERVER['REQUEST_URI'];
-$path = parse_url($uri, PHP_URL_PATH);
-$path = str_replace('/public', '', $path); // Ajustar para o caminho base
 
-// Dividir o caminho
-$path_parts = explode('/', trim($path, '/'));
-$resource = $path_parts[0] ?? '';
-$id = $path_parts[1] ?? null;
+// var_dump($resource);
+// var_dump($action);
 
-// Roteamento
+// Roteamento principal
 try {
-    switch ("$method $resource") {
-        // Rotas públicas
-        case 'POST auth/login':
-            $controller = new AuthController();
-            $controller->login();
-            break;
-            
-        case 'POST auth/register':
-            $controller = new AuthController();
-            $controller->register();
-            break;
-            
-        case 'POST auth/forgot-password':
-            $controller = new AuthController();
-            $controller->forgotPassword();
-            break;
-            
-        case 'POST auth/reset-password':
-            $controller = new AuthController();
-            $controller->resetPassword();
-            break;
-            
-        // Rotas protegidas
-        case 'GET auth/validate':
-            AuthMiddleware::handle();
-            $controller = new AuthController();
-            $controller->validateToken();
-            break;
-            
-        case 'POST auth/change-password':
-            AuthMiddleware::handle();
-            $controller = new AuthController();
-            $controller->changePassword();
-            break;
-            
-        case 'GET users':
-            AuthMiddleware::handle();
-            $controller = new UserController();
-            $controller->index();
-            break;
-            
-        case 'GET users/byid' when $id:
-            AuthMiddleware::handle();
-            $controller = new UserController();
-            $controller->show($id);
-            break;
-            
-        case 'POST users':
-            AuthMiddleware::handle();
-            $controller = new UserController();
-            $controller->store();
-            break;
-            
-        case 'PUT users' when $id:
-            AuthMiddleware::handle();
-            $controller = new UserController();
-            $controller->update($id);
-            break;
-            
-        case 'DELETE users' when $id:
-            AuthMiddleware::handle();
-            $controller = new UserController();
-            $controller->destroy($id);
-            break;
-            
-        case 'GET employees':
-            AuthMiddleware::handle();
-            $controller = new EmployeeController();
-            $controller->index();
-            break;
-            
-        case 'GET employees' when $id:
-            AuthMiddleware::handle();
-            $controller = new EmployeeController();
-            $controller->show($id);
-            break;
-            
-        case 'POST employees':
-            AuthMiddleware::handle();
-            $controller = new EmployeeController();
-            $controller->store();
-            break;
-            
-        case 'PUT employees' when $id:
-            AuthMiddleware::handle();
-            $controller = new EmployeeController();
-            $controller->update($id);
-            break;
-            
-        case 'DELETE employees' when $id:
-            AuthMiddleware::handle();
-            $controller = new EmployeeController();
-            $controller->destroy($id);
-            break;
-            
-        default:
-            Response::error('Rota não encontrada', 404);
-            break;
+    // ROTAS PÚBLICAS
+    // POST /auth/login
+    if ($method == 'POST' && $resource == 'auth' && $action == 'login') {
+        $controller = new AuthController();
+        $controller->login();
+        exit();
     }
+    
+    // POST /auth/register
+    if ($method == 'POST' && $resource == 'auth' && $action == 'register') {
+        $controller = new AuthController();
+        $controller->register();
+        exit();
+    }
+    
+    // POST /auth/forgot-password
+    if ($method == 'POST' && $resource == 'auth' && $action == 'forgot-password') {
+        $controller = new AuthController();
+        $controller->forgotPassword();
+        exit();
+    }
+    
+    // POST /auth/reset-password
+    if ($method == 'POST' && $resource == 'auth' && $action == 'reset-password') {
+        $controller = new AuthController();
+        $controller->resetPassword();
+        exit();
+    }
+    
+    // ROTAS PROTEGIDAS
+    // Todas as rotas abaixo exigem autenticação
+    $authData = AuthMiddleware::handle();
+    
+    // GET /auth/validate
+    if ($method == 'GET' && $resource == 'auth' && $action == 'validate') {
+        $controller = new AuthController();
+        $controller->validateToken();
+        exit();
+    }
+    
+    // POST /auth/change-password
+    if ($method == 'POST' && $resource == 'auth' && $action == 'change-password') {
+        $controller = new AuthController();
+        $controller->changePassword();
+        exit();
+    }
+    
+    // CRUD USUÁRIOS
+    if ($resource == 'users') {
+        $controller = new UserController();
+        
+        // GET /users
+        if ($method == 'GET' && $action == '') {
+            $controller->index();
+            exit();
+        }
+        
+        // GET /users/{id}
+        if ($method == 'GET' && is_numeric($action)) {
+            $controller->show($action);
+            exit();
+        }
+        
+        // POST /users
+        if ($method == 'POST' && $action == '') {
+            $controller->store();
+            exit();
+        }
+        
+        // PUT /users/{id}
+        if ($method == 'PUT' && is_numeric($action)) {
+            $controller->update($action);
+            exit();
+        }
+        
+        // DELETE /users/{id}
+        if ($method == 'DELETE' && is_numeric($action)) {
+            $controller->destroy($action);
+            exit();
+        }
+    }
+    
+    // CRUD FUNCIONÁRIOS
+    if ($resource == 'employees') {
+        $controller = new EmployeeController();
+        
+        // GET /employees
+        if ($method == 'GET' && $action == '') {
+            $controller->index();
+            exit();
+        }
+        
+        // GET /employees/{id}
+        if ($method == 'GET' && is_numeric($action)) {
+            $controller->show($action);
+            exit();
+        }
+        
+        // POST /employees
+        if ($method == 'POST' && $action == '') {
+            $controller->store();
+            exit();
+        }
+        
+        // PUT /employees/{id}
+        if ($method == 'PUT' && is_numeric($action)) {
+            $controller->update($action);
+            exit();
+        }
+        
+        // DELETE /employees/{id}
+        if ($method == 'DELETE' && is_numeric($action)) {
+            $controller->destroy($action);
+            exit();
+        }
+    }
+    
+    // Se chegou aqui, rota não encontrada
+    Response::error('Rota não encontrada: ' . $request_uri, 404);
+    
 } catch (Exception $e) {
     Response::error('Erro interno do servidor: ' . $e->getMessage(), 500);
 }
-?>  
+?>

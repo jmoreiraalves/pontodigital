@@ -129,6 +129,7 @@ class User {
         
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            //var_dump($row);
             
             if ($row['status'] != 'active') {
                 return ['success' => false, 'message' => 'Conta inativa'];

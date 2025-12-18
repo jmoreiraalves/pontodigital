@@ -13,7 +13,7 @@ class AuthController {
     
     public function login() {
         $data = json_decode(file_get_contents("php://input"));
-        
+            
         if (!isset($data->email) || !isset($data->password)) {
             Response::error('Email e senha são obrigatórios');
         }
