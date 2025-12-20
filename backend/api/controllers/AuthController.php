@@ -29,6 +29,25 @@ class AuthController {
             Response::error($result['message']);
         }
     }
+
+    public function loginmobile() {
+        $data = json_decode(file_get_contents("php://input"));
+            
+        if (!isset($data->cpf) || !isset($data->password)) {
+            Response::error('CPF e senha são obrigatórios');
+        }
+        
+        $result = $this->user->loginMobile($data->cpf, $data->password);
+        
+        if ($result['success']) {
+            Response::success([
+                'token' => $result['token'],
+                'user' => $result['user']
+            ], 'Login realizado com sucesso');
+        } else {
+            Response::error($result['message']);
+        }
+    }
     
     public function register() {
         $data = json_decode(file_get_contents("php://input"));

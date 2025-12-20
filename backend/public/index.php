@@ -74,6 +74,13 @@ try {
         $controller->login();
         exit();
     }
+
+    //POST /auth/loginmobile
+    if($method =='POST' && $resource == 'auth'&& $action == 'loginmobile') {
+        $controller = new AuthController();      
+        $controller->loginmobile();
+        exit();
+    }
     
     // POST /auth/register
     if ($method == 'POST' && $resource == 'auth' && $action == 'register') {

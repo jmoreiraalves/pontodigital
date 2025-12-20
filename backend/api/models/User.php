@@ -11,6 +11,7 @@ class User {
     public $id;
     public $name;
     public $email;
+    public $cpf;
     public $password;
     public $role;
     public $status;
@@ -24,13 +25,14 @@ class User {
     
     public function create() {
         $query = "INSERT INTO " . $this->table . " 
-                  SET name = :name, email = :email, password = :password, role = :role";
+                  SET name = :name, email = :email, cpf = :cpf, password = :password, role = :role";
         
         $stmt = $this->conn->prepare($query);
         
         // Sanitize
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->cpf = htmlspecialchars(strip_tags($this->cpf));
         $this->password = htmlspecialchars(strip_tags($this->password));
         $this->role = htmlspecialchars(strip_tags($this->role));
         
@@ -40,6 +42,7 @@ class User {
         // Bind values
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':cpf', $this->cpf);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
         
@@ -51,7 +54,7 @@ class User {
     }
     
     public function read() {
-        $query = "SELECT id, name, email, role, status, created_at FROM " . $this->table;
+        $query = "SELECT id, name, email, cpf, role, status, created_at FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         
@@ -59,7 +62,7 @@ class User {
     }
     
     public function readOne() {
-        $query = "SELECT id, name, email, role, status, created_at FROM " . $this->table . " WHERE id = ? LIMIT 1";
+        $query = "SELECT id, name, email, cpf, role, status, created_at FROM " . $this->table . " WHERE id = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
@@ -70,6 +73,7 @@ class User {
             $this->name = $row['name'];
             $this->email = $row['email'];
             $this->role = $row['role'];
+            $this->cpf = $row['cpf'];
             $this->status = $row['status'];
             return true;
         }
@@ -106,7 +110,7 @@ class User {
     }
     
     public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE id = :id";
+        $query = "UPDATE " . $this->table . " SET status = 'inactive' WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         
         $this->id = htmlspecialchars(strip_tags($this->id));
@@ -162,6 +166,51 @@ class User {
         }
         
         return ['success' => false, 'message' => 'Email ou senha inválidos'];
+    }
+
+    public function loginMobile($cpf, $password) {
+        $query = "SELECT id, name, email, password, role, status FROM " . $this->table . " WHERE cpf = :cpf LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        
+        $cpf = htmlspecialchars(strip_tags($cpf));
+        $stmt->bindParam(':cpf', $cpf);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            //var_dump($row);
+            
+            if ($row['status'] != 'active') {
+                return ['success' => false, 'message' => 'Conta inativa'];
+            }
+            
+            if (password_verify($password, $row['password'])) {
+                // Gerar token JWT
+                $payload = [
+                    'user_id' => $row['id'],
+                    'name' => $row['name'],
+                    'email' => $row['email'],
+                    'role' => $row['role'],
+                    'iat' => time(),
+                    'exp' => time() + (60 * 60 * 24) // 24 horas
+                ];
+                
+                $token = JWT::encode($payload);
+                
+                return [
+                    'success' => true,
+                    'token' => $token,
+                    'user' => [
+                        'id' => $row['id'],
+                        'name' => $row['name'],
+                        'email' => $row['email'],
+                        'role' => $row['role']
+                    ]
+                ];
+            }
+        }
+        
+        return ['success' => false, 'message' => 'CPF ou senha inválidos'];
     }
     
     public function requestPasswordReset($email) {
