@@ -5,6 +5,37 @@ require_once './includes/functions.php';
 requireLogin();
 checkSessionTimeout();
 
+$user = [
+        "empresa_id"    =>  $_SESSION['empresa_id'],
+        "user_id"       =>  $_SESSION['user_id'] ,
+        "username"      =>  $_SESSION['username'],
+        "nome"          =>  $_SESSION['nome'],
+        "email"         =>  $_SESSION['email'],
+        "nivel_acesso"  =>  $_SESSION['nivel_acesso'],
+        "ultimo_acesso" =>  $_SESSION['LAST_ACTIVITY']
+];    
+
+$includesPermitidos = [
+    'dashboard',
+    'empresas',
+    'empresa',
+    'acessonegado-inc',
+    'importar-categorias-inc',
+];
+
+$pagina = (isset($_GET['menu']) ? $_GET['menu'] : 'c');
+
+$include = $pagina;
+if ($include !== 'dashboard') {
+    $include = slugify($include) ;
+}
+
+// Se não estiver na lista, força o dashboard
+if (!in_array($include, $includesPermitidos, true)) {
+    $include = 'dashboard';
+}
+
+
 
 ?>
 <!DOCTYPE html>
@@ -14,8 +45,10 @@ checkSessionTimeout();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - <?php echo SISTEMA_NOME; ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+     <link href="assets/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
     
     <style>
@@ -167,7 +200,7 @@ checkSessionTimeout();
             <!-- Main Content -->
             <main class="col-lg-10 main-content" id="mainContent">
                 <?php
-                  include './inc/' . $menuAtivo . '.php';
+                  include './inc/' . $include . '.php';
                 ?>
             </main>
         </div>
@@ -183,13 +216,18 @@ checkSessionTimeout();
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script> 
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script> -->
+     <script src="assets/js/jquery.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+     <script src="assets/js/select2.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script> -->
+     <script src="assets/js/jquery.mask.min.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> -->
+     <script src="assets/js/jquery.dataTables.min.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script> -->
+     <script src="assets/js/dataTables.bootstrap5.min.js"></script>
     
 
     <script>
@@ -199,37 +237,37 @@ checkSessionTimeout();
         });
 
         // Atualizar tempo de sessão
-        setInterval(function () {
-            fetch('includes/session_ping.php')
-                .catch(error => console.log('Ping de sessão falhou'));
-        }, 60000); // A cada 1 minuto
+        // setInterval(function () {
+        //     fetch('includes/session_ping.php')
+        //         .catch(error => console.log('Ping de sessão falhou'));
+        // }, 60000); // A cada 1 minuto
 
-        // Auto logout após inatividade
-        let timeout;
-        function resetTimer() {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                window.location.href = '../logout.php?timeout=1';
-            }, <?php echo SESSION_TIMEOUT * 1000; ?>);
-        }
+        // // Auto logout após inatividade
+        // let timeout;
+        // function resetTimer() {
+        //     clearTimeout(timeout);
+        //     timeout = setTimeout(() => {
+        //         window.location.href = '../logout.php?timeout=1';
+        //     }, <?php echo SESSION_TIMEOUT * 1000; ?>);
+        // }
 
-        document.addEventListener('mousemove', resetTimer);
-        document.addEventListener('keypress', resetTimer);
-        resetTimer();
+        // document.addEventListener('mousemove', resetTimer);
+        // document.addEventListener('keypress', resetTimer);
+        // resetTimer();
 
-        $(document).ready(function () {
-            $("#sidebar a").on("click", function (e) {
-                e.preventDefault();
-                let href = $(this).data("href");
+        // $(document).ready(function () {
+        //     $("#sidebar a").on("click", function (e) {
+        //         e.preventDefault();
+        //         let href = $(this).data("href");
 
-                $.post("dashboard.php", { menuativo: href }, function (data) {
-                    $("#conteudo").html(data);
-                });
-            });
-        });
+        //         $.post("dashboard.php", { menuativo: href }, function (data) {
+        //             $("#conteudo").html(data);
+        //         });
+        //     });
+        // });
 
     <?php
-      include './inc/js/'. $menuAtivo .'.js';
+      //include './inc/js/'. $menuAtivo .'.js';
     ?>
     </script>
 

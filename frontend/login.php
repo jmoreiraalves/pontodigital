@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($user && password_verify($password, $user['senha'])) {
             // Criar sessão
+            $_SESSION['empresa_id'] = $user['empresa_id'];
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['codigo'];
             $_SESSION['nome'] = $user['nome'];

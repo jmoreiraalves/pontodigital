@@ -110,6 +110,16 @@ $ultimo_registro = null;
                             <form method="POST" class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="cpf" class="form-label">
+                                        <i class="fas fa-id-card"></i> Tokem Empresa
+                                    </label>
+                                    <input type="text" class="form-control " id="token" name="token" 
+                                           placeholder="Token da Empresa" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe o token da empresa.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cpf" class="form-label">
                                         <i class="fas fa-id-card"></i> CPF
                                     </label>
                                     <input type="text" class="form-control cpf-mask" id="cpf" name="cpf" 
@@ -154,7 +164,7 @@ $ultimo_registro = null;
                         
                         <div class="card-footer">
                             <a href="login.php" class="btn btn-secondary btn-lg">
-                                        <i class="fas fa-home"></i> ACesso ao administrativo
+                                        <i class="fas fa-home"></i> Administrativo
                                     </a>
                             <!-- <div class="row text-center">
                                 <div class="col-md-3">

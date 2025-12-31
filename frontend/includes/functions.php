@@ -233,3 +233,23 @@ function calcular_horas_trabalhadas($colaborador_id, $data) {
     
     return number_format($horas, 2);
 }
+
+function slugify(string $texto): string {
+    // 1. Normaliza para UTF-8 e remove acentos
+    $texto = iconv('UTF-8', 'ASCII//TRANSLIT', $texto);
+
+    // 2. Remove caracteres não alfanuméricos (mantém espaço e traço)
+    $texto = preg_replace('/[^a-zA-Z0-9\s-]/', '', $texto);
+
+    // 3. Substitui espaços em branco por traços
+    $texto = preg_replace('/[\s]+/', '-', $texto);
+
+    // 4. Converte para minúsculas
+    $texto = strtolower($texto);
+
+    // 5. Remove traços duplicados
+    $texto = preg_replace('/-+/', '-', $texto);
+
+    // 6. Remove traços no início/fim
+    return trim($texto, '-');
+}

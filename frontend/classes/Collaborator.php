@@ -95,9 +95,11 @@ class Collaborator {
     /**
      * Registra batida de ponto
      */
-    public function setRegistroPonto(string $cpf, string $senha): array {
-        $sql = "SELECT * FROM colaboradores WHERE ativo = 1 AND cpf = ?";
-        $colaborador = $this->db->query($sql, [$cpf])->fetch() ?: null;
+    public function setRegistroPonto(string $cpf, string $senha, string $token): array {
+        $sql = "SELECT * FROM colaboradores c
+                INNER JOIN empresas e ON e.id = c.empresa_id 
+                WHERE c.ativo = 1 AND e.prefixo = ? AND c.cpf = ?";
+        $colaborador = $this->db->query($sql, [$token,$cpf])->fetch() ?: null;
 
         if ($colaborador && password_verify($senha, $colaborador['senha'])) {
 
@@ -276,7 +278,7 @@ class Collaborator {
                 WHERE empresa_id = ? AND YEAR(created_at) = ?";
         $result = $this->db->query($sql, [$empresaId, $ano])->fetch();
         $sequencial = str_pad($result['total'] + 1, 4, '0', STR_PAD_LEFT);
-        return "USR-{$empresaId}-{$ano}-{$sequencial}";
+        return "USR-{".str_pad($empresaId, 6, '0', STR_PAD_LEFT)."}-{$ano}-{$sequencial}";
     }
     
     /**
