@@ -1,6 +1,6 @@
 /*
 SQLyog Community v12.4.0 (64 bit)
-MySQL - 10.4.32-MariaDB : Database - ponto_eletronico
+MySQL - 10.6.24-MariaDB : Database - ponto_eletronico
 *********************************************************************
 */
 
@@ -84,12 +84,14 @@ CREATE TABLE `empresas` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cnpj` (`cnpj`),
   UNIQUE KEY `prefixo` (`prefixo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `empresas` */
 
 insert  into `empresas`(`id`,`nome`,`cnpj`,`prefixo`,`endereco`,`telefone`,`email`,`ativa`,`created_at`,`updated_at`) values 
-(1,'Empresa Principal','00.000.000/0001-00','EMP',NULL,NULL,'contato@empresa.com',1,'2025-12-23 14:12:01','2025-12-23 14:12:01');
+(1,'Empresa Principal','00.000.000/0001-00','EMP',NULL,NULL,'contato@empresa.com',1,'2025-12-23 14:12:01','2025-12-23 14:12:01'),
+(2,'Empresa teste','11.000.000/0001-11','EMT',NULL,NULL,'contato@teste.com.br',1,'2025-12-31 11:03:55','2025-12-31 11:03:55'),
+(3,'EMPRESA DO JOAO','93.553.075/0001-80','EJO','RUA SETE, 80\r\nJARDIM MONTE VERDE','(35984-064272','empjoao@joao.com.br',1,'2025-12-31 13:45:51','2025-12-31 13:45:51');
 
 /*Table structure for table `logs_sistema` */
 
@@ -109,9 +111,12 @@ CREATE TABLE `logs_sistema` (
   KEY `colaborador_id` (`colaborador_id`),
   CONSTRAINT `logs_sistema_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL,
   CONSTRAINT `logs_sistema_ibfk_2` FOREIGN KEY (`colaborador_id`) REFERENCES `colaboradores` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `logs_sistema` */
+
+insert  into `logs_sistema`(`id`,`usuario_id`,`colaborador_id`,`acao`,`descricao`,`ip_address`,`user_agent`,`created_at`) values 
+(1,NULL,NULL,'CADASTRO_EMPRESA','Nova empresa: EMPRESA DO JOAO','127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0','2025-12-31 13:45:51');
 
 /*Table structure for table `registros_ponto` */
 
