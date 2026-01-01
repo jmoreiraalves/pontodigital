@@ -28,6 +28,25 @@ class Database {
         $stmt->execute($params);
         return $stmt;
     }
+
+     // Método para buscar todos os registros
+    public function fetchAll($sql, $params = []) {
+        $stmt = $this->query($sql, $params);
+        return $stmt->fetchAll();
+    }
+
+     // Método para buscar um único registro
+    public function fetchOne($sql, $params = []) {
+        $stmt = $this->query($sql, $params);
+        return $stmt->fetch();
+    }
+    
+    // Método para verificar se existe um registro
+    public function exists($table, $field, $value) {
+        $sql = "SELECT 1 FROM {$table} WHERE {$field} = :value LIMIT 1";
+        $stmt = $this->query($sql, [':value' => $value]);
+        return (bool) $stmt->fetch();
+    }
     
     public function lastInsertId() {
         return $this->connection->lastInsertId();
