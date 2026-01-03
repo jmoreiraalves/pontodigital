@@ -25,7 +25,8 @@ $includesPermitidos = [
     'profissional-ti'
 ];
 
-$pagina = (isset($_GET['menu']) ? $_GET['menu'] : 'dashboard');
+$pagina = (isset($_GET['submenu']) ? $_GET['submenu'] : 'dashboard');
+$menuprincipal = (isset($_GET['menu']) ? $_GET['menu'] : 'dashboard');
 
 $include = $pagina;
 if ($include !== 'dashboard') {
@@ -37,9 +38,8 @@ if (!in_array($include, $includesPermitidos, true)) {
     $include = 'dashboard';
 }
 
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -85,8 +85,8 @@ if (!in_array($include, $includesPermitidos, true)) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="?menu=dashboard" style="color: black;">
+            <li class="nav-item <?= $menuprincipal === 'dashboard' ? 'active' : '' ?>">
+                <a class="nav-link" href="?menu=dashboard&submenu=dashboard" style="color: black;">
                     <i class="fas fa-fw fa-tachometer-alt" style="color: black;"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -100,7 +100,7 @@ if (!in_array($include, $includesPermitidos, true)) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item <?= $menuprincipal === 'cadastro' ? 'active' : '' ?>">
                 <a class="nav-link collapsed"  style="color: black;" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog" style="color: black;"></i>
@@ -109,15 +109,15 @@ if (!in_array($include, $includesPermitidos, true)) {
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Components:</h6> -->
-                        <a class="collapse-item" href="?menu=empresa">Empresa</a>
-                        <a class="collapse-item" href="?menu=empresas">Empresas</a>
-                         <a class="collapse-item" href="?menu=colaboradores">Colaboradores</a>
+                        <a class="collapse-item <?= $include === 'empresa' ? 'active' : '' ?>" href="?menu=cadastros&submenu=empresa">Empresa</a>
+                        <a class="collapse-item <?= $include === 'empresas' ? 'active' : '' ?>" href="?menu=cadastros&submenu=empresas">Empresas</a>
+                         <a class="collapse-item <?= $include === 'colaboradores' ? 'active' : '' ?>" href="?menu=cadastros&submenu=colaboradores">Colaboradores</a>
                     </div>
                 </div>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item <?= $menuprincipal === 'movimentacao' ? 'active' : '' ?>">
                 <a class="nav-link collapsed" style="color: black;" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench" style="color: black;"></i>
@@ -127,8 +127,8 @@ if (!in_array($include, $includesPermitidos, true)) {
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="?menu=troca-turno">Torca de Turno</a>
-                        <a class="collapse-item" href="?menu=profissional-ti">Profissional de T.I.</a>
+                        <a class="collapse-item <?= $include === 'troca-turno' ? 'active' : '' ?>" href="?menu=movimentacao&submenu=troca-turno">Torca de Turno</a>
+                        <a class="collapse-item<?= $include === 'profissional-ti' ? 'active' : '' ?>" href="?menu=movimentacao&submenu=profissional-ti">Profissional de T.I.</a>
                     </div>
                 </div>
             </li>
@@ -142,7 +142,7 @@ if (!in_array($include, $includesPermitidos, true)) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item <?= $menuprincipal === 'relatorios' ? 'active' : '' ?>">
                 <a class="nav-link" style="color: black;" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                     aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder" style="color: black;"></i>
@@ -152,40 +152,18 @@ if (!in_array($include, $includesPermitidos, true)) {
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Registros:</h6>
-                        <a class="collapse-item" href="?menu=">Pontos em andamento</a>
-                        <a class="collapse-item" href="?menu=">Pontos atrasados</a>
-                        <a class="collapse-item" href="?menu=">Faltas</a>
-                        <a class="collapse-item" href="?menu=">Atestados Médicos</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Pontos em andamento</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Pontos atrasados</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Faltas</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Atestados Médicos</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Espelho de ponto:</h6>
-                        <a class="collapse-item" href="?menu=">Mensal</a>
-                        <a class="collapse-item active" href="?menu=">Anual</a>
-                        <a class="collapse-item" href="?menu=">Holerite</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Mensal</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Anual</a>
+                        <a class="collapse-item<?= $include === '' ? 'active' : '' ?>" href="?menu=relatorios&submenu=">Holerite</a>
                     </div>
                 </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <!-- <li class="nav-item">
-                <a class="nav-link" style="color: black;" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area" style="color: black;"></i>
-                    <span>Charts</span></a>
-            </li> -->
-
-            <!-- Nav Item - Tables -->
-            <!-- <li class="nav-item">
-                <a class="nav-link" style="color: black;" href="tables.html">
-                    <i class="fas fa-fw fa-table" style="color: black;"></i>
-                    <span>Tables</span></a>
-            </li> -->
-
-            <!-- Divider -->
-            <!-- <hr class="sidebar-divider d-none d-md-block"> -->
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <!-- <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div> -->
+            </li>            
 
         </ul>
         <!-- End of Sidebar -->
@@ -261,7 +239,10 @@ if (!in_array($include, $includesPermitidos, true)) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                    <!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1> -->
+                     <?php
+                        include './inc/'.$include.'.php'
+                     ?>
 
                 </div>
                 <!-- /.container-fluid -->
