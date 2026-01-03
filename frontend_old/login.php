@@ -3,26 +3,26 @@ require_once './config/database.php';
 require_once './config/config.php';
 require_once './includes/functions.php';
 
-// $hash = password_hash("admin123", PASSWORD_DEFAULT);
-//   var_dump($hash); 
+$hash = password_hash("admin123", PASSWORD_DEFAULT);
+//  var_dump($hash); 
 
-// // Verificar se já está logado
-// if (isset($_SESSION['user_id'])) {
-//     header("Location: dashboard.php");
-//     exit();
-// }
+// Verificar se já está logado
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
 
-// // Redirecionar se já tiver sessão de ponto
-// if (hasPontoSession()) {
-//     header('Location: registrar_ponto.php');
-//     exit;
-// }
+// Redirecionar se já tiver sessão de ponto
+if (hasPontoSession()) {
+    header('Location: registrar_ponto.php');
+    exit;
+}
 
-// // Redirecionar se já tiver sessão auth
-// if (isAuth()) {
-//     header('Location: dashboard.php');
-//     exit;
-// }
+// Redirecionar se já tiver sessão auth
+if (isAuth()) {
+    header('Location: dashboard.php');
+    exit;
+}
 
 
 $error = '';
@@ -33,39 +33,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     try {
-        $database = new Database();
-        $db = $database->getConnection();
+        $db = new Database();
 
         // Buscar usuário
-        // $stmt = $db->query(
-        //     "SELECT * FROM usuarios WHERE email = '{$username}' AND ativo = 1"
-        // );
+        $stmt = $db->query(
+            "SELECT * FROM usuarios WHERE email = ? AND ativo = 1",
+            [$username]
+        );
 
-        // $user = $stmt->fetch(); 
- 
-        $query = "SELECT id, empresa_id, codigo, nome, cpf, email, senha, tipo, ativo FROM usuarios 
-                  WHERE email = :email AND ativo = '1'";
-        $stmt = $db->prepare($query);
-        $stmt->bindParam(':email', $username);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch();
 
-        // var_dump($query);
-
-         var_dump($user);
+        // var_dump($user);
 
         if ($user && password_verify($password, $user['senha'])) {
             // Criar sessão
             $_SESSION['empresa_id'] = $user['empresa_id'];
-            $_SESSION['usuario_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['codigo'];
             $_SESSION['nome'] = $user['nome'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['nivel_acesso'] = $user['tipo'];
             $_SESSION['LAST_ACTIVITY'] = time();
-
-            $cookie_value = base64_encode($usuario['id'] . ':' . $usuario['email'] . ':' . $usuario['empresa_id']);
-                    setcookie('pontodigital_login', $cookie_value, time() + (86400 * 30), "/");
 
             header("Location: dashboard.php");
             exit();

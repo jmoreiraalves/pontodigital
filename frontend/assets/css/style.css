@@ -1,0 +1,63 @@
+body {
+    font-size: 0.9rem;
+}
+
+#sidebar {
+    min-height: 100vh;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-link {
+    color: #adb5bd !important;
+    padding: 10px 15px;
+    margin: 2px 0;
+    transition: all 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #fff !important;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 5px;
+}
+
+.nav-link i {
+    margin-right: 10px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.table th {
+    font-weight: 600;
+    border-top: none;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.modal-content {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.alert {
+    border: none;
+}
