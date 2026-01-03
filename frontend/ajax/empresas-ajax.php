@@ -299,16 +299,16 @@ elseif ($action === 'update') {
             exit;
         }
 
-        // Verificar permissão
-        if (isset($cookie['empresa_id']) && $cookie['empresa_id'] != $empresa_id) {
-            if ($cookie['perfil'] !== 'admin') {
-                echo json_encode([
-                    'success' => false, 
-                    'message' => 'Sem permissão para editar esta empresa.'
-                ]);
-                exit;
-            }
-        }
+        // // Verificar permissão
+        // if (isset($cookie['empresa_id']) && $cookie['empresa_id'] != $empresa_id) {
+        //     if ($cookie['perfil'] !== 'admin') {
+        //         echo json_encode([
+        //             'success' => false, 
+        //             'message' => 'Sem permissão para editar esta empresa.'
+        //         ]);
+        //         exit;
+        //     }
+        // }
 
         // Verificar se CNPJ já existe (excluindo a própria empresa)
         $stmtCheckCnpj = $pdo->prepare("SELECT id FROM empresas WHERE cnpj = :cnpj AND id != :id");
@@ -390,7 +390,7 @@ elseif ($action === 'update') {
 elseif ($action === 'delete') {
     try {
         $empresa_id = $_POST['delete_id'] ?? $_GET['id'] ?? 0;
-        $hard_delete = isset($_GET['hard']) ? (bool)$_GET['hard'] : false;
+        $hard_delete = false ; ////isset($_GET['hard']) ? (bool)$_GET['hard'] : false;
         
         if (!$empresa_id) {
             echo json_encode([
@@ -421,13 +421,13 @@ elseif ($action === 'delete') {
             exit;
         }
 
-        if ($hard_delete) {
-            // Hard delete - remover completamente
-            $stmt = $pdo->prepare("DELETE FROM empresas WHERE id = :id");
-        } else {
+        // if ($hard_delete) {
+        //     // Hard delete - remover completamente
+        //     $stmt = $pdo->prepare("DELETE FROM empresas WHERE id = :id");
+        // } else {
             // Soft delete - marcar como inativa
             $stmt = $pdo->prepare("UPDATE empresas SET ativa = 0 WHERE id = :id");
-        }
+        // }
         
         $result = $stmt->execute([':id' => $empresa_id]);
         
