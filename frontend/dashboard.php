@@ -20,10 +20,12 @@ $includesPermitidos = [
     'empresas',
     'empresa',
     'acessonegado-inc',
-    'importar-categorias-inc',
+    'colaboradores',
+    'troca-turno',
+    'profissional-ti'
 ];
 
-$pagina = (isset($_GET['menu']) ? $_GET['menu'] : 'c');
+$pagina = (isset($_GET['menu']) ? $_GET['menu'] : 'dashboard');
 
 $include = $pagina;
 if ($include !== 'dashboard') {
@@ -42,243 +44,281 @@ if (!in_array($include, $includesPermitidos, true)) {
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - <?php echo SISTEMA_NOME; ?></title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
-     <link href="assets/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    
-    <style>
-        .sidebar {
-            background: #1b2e1b;
-            min-height: calc(100vh - 120px);
-            padding: 20px 0;
-            position: fixed;
-            width: 250px;
-            transition: all 0.3s;
-        }
 
-        .sidebar a {
-            color:#ecf0f1;
-            padding: 10px 20px;
-            display: block;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        .sidebar a:hover {
-            background: #2e4d2e;
-            color: #fff;
-            padding-left: 25px;
-        }
+    <title>Ponto Digital</title>
 
-        .sidebar a.active {
-            background: #27ae60;
-            color: white;
-        }
+    <!-- Custom fonts for this template-->
+    <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
 
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-
-        /* .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        } */
-        .navbar {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); /* gradiente verde */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-    
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        } */
-        .stat-card {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); /* gradiente verde */
-            color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    <!-- Custom styles for this template-->
+    <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
    
 
-        .table th {
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        /* footer {
-            background: #2c3e50;
-            color: white;
-            padding: 15px 0;
-            margin-top: 30px;
-        } */
-        
-        .footer {
-            background: #1b2e1b; /* verde escuro sólido */
-            color: white;
-            padding: 15px 0;
-            margin-top: 30px;
-        }
-    
-
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-left: -250px;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .sidebar.active {
-                margin-left: 0;
-            }
-        }
-    </style>
 </head>
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <button class="btn btn-dark d-lg-none" type="button" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <span class="navbar-brand">
-                <i class="fas fa-file-contract"></i> <?php echo SISTEMA_NOME; ?>
-            </span>
-            <div class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user"></i> <?php echo $_SESSION['nome']; ?>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="?menu=profile">
-                                <i class="fas fa-user-cog"></i> Meu Perfil
-                            </a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="./logout.php">
-                                <i class="fas fa-sign-out-alt"></i> Sair
-                            </a></li>
-                    </ul>
-                </li>
-            </div>
-        </div>
-    </nav>
+<body id="page-top">
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <?php
-            require_once './includes/menu.php';
-            ?>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-success sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" style="color: black;" href="?menu=dashboard">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Ponto <sup>Digital</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="?menu=dashboard" style="color: black;">
+                    <i class="fas fa-fw fa-tachometer-alt" style="color: black;"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading" style="color: black;">
+                Gestão
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed"  style="color: black;" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog" style="color: black;"></i>
+                    <span>Cadastros</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="?menu=empresa">Empresa</a>
+                        <a class="collapse-item" href="?menu=empresas">Empresas</a>
+                         <a class="collapse-item" href="?menu=colaboradores">Colaboradores</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" style="color: black;" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench" style="color: black;"></i>
+                    <span>Movimentação</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
+                        <a class="collapse-item" href="?menu=troca-turno">Torca de Turno</a>
+                        <a class="collapse-item" href="?menu=profissional-ti">Profissional de T.I.</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading" style="color: black;">
+                Relatórios
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item active">
+                <a class="nav-link" style="color: black;" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+                    aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder" style="color: black;"></i>
+                    <span>Relatórios</span>
+                </a>
+                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registros:</h6>
+                        <a class="collapse-item" href="?menu=">Pontos em andamento</a>
+                        <a class="collapse-item" href="?menu=">Pontos atrasados</a>
+                        <a class="collapse-item" href="?menu=">Faltas</a>
+                        <a class="collapse-item" href="?menu=">Atestados Médicos</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Espelho de ponto:</h6>
+                        <a class="collapse-item" href="?menu=">Mensal</a>
+                        <a class="collapse-item active" href="?menu=">Anual</a>
+                        <a class="collapse-item" href="?menu=">Holerite</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" style="color: black;" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area" style="color: black;"></i>
+                    <span>Charts</span></a>
+            </li> -->
+
+            <!-- Nav Item - Tables -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" style="color: black;" href="tables.html">
+                    <i class="fas fa-fw fa-table" style="color: black;"></i>
+                    <span>Tables</span></a>
+            </li> -->
+
+            <!-- Divider -->
+            <!-- <hr class="sidebar-divider d-none d-md-block"> -->
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <!-- <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div> -->
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
-            <main class="col-lg-10 main-content" id="mainContent">
-                <?php
-                  include './inc/' . $include . '.php';
-                ?>
-            </main>
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Meu Perfil
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Alterar senha
+                                </a>                               
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center">
-        <div class="container">
-            <p class="mb-0">
-                <?php echo EMPRESA_NOME; ?> &copy; <?php echo date('Y'); ?> |
-                Sistema desenvolvido por: João Carlos Moreira Alves Junior
-            </p>
-        </div>
-    </footer>
-    
-    <!-- <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script> -->
-     <script src="assets/js/dataTables.bootstrap5.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script> 
-    
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script> -->
-     <script src="assets/js/jquery.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-     <script src="assets/js/select2.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script> -->
-     <script src="assets/js/jquery.mask.min.js"></script>
-    <!-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> -->
-     <script src="assets/js/jquery.dataTables.min.js"></script>
-   
-    
-    <!-- JavaScript Personalizado -->
-    <script src="assets/js/script.js"></script>
-    
+    <!-- Bootstrap core JavaScript-->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Core plugin JavaScript-->
+    <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-
-    <script>
-        // Toggle sidebar em mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
-
-        // Atualizar tempo de sessão
-        // setInterval(function () {
-        //     fetch('includes/session_ping.php')
-        //         .catch(error => console.log('Ping de sessão falhou'));
-        // }, 60000); // A cada 1 minuto
-
-        // // Auto logout após inatividade
-        // let timeout;
-        // function resetTimer() {
-        //     clearTimeout(timeout);
-        //     timeout = setTimeout(() => {
-        //         window.location.href = '../logout.php?timeout=1';
-        //     }, <?php echo SESSION_TIMEOUT * 1000; ?>);
-        // }
-
-        // document.addEventListener('mousemove', resetTimer);
-        // document.addEventListener('keypress', resetTimer);
-        // resetTimer();
-
-        // $(document).ready(function () {
-        //     $("#sidebar a").on("click", function (e) {
-        //         e.preventDefault();
-        //         let href = $(this).data("href");
-
-        //         $.post("dashboard.php", { menuativo: href }, function (data) {
-        //             $("#conteudo").html(data);
-        //         });
-        //     });
-        // });
-
-    <?php
-      //include './inc/js/'. $menuAtivo .'.js';
-    ?>
-    </script>
-
-    
+    <!-- Custom scripts for all pages-->
+    <script src="assets/js/sb-admin-2.min.js"></script>
 
 </body>
 
