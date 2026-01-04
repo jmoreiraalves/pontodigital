@@ -1,17 +1,17 @@
 $(document).ready(function () {
 
-    ////criar nova empresa
-    $('#formNovaEmpresa').on('submit', function (e) {
+    ////criar novo colaborador
+    $('#formNovaColaborador').on('submit', function (e) {
         e.preventDefault();
 
         $.ajax({
-            url: 'ajax/empresas-ajax.php?action=create',
+            url: 'ajax/colaboradores-ajax.php?action=create',
             type: 'POST',
             dataType: 'json', // Adicione esta linha para esperar JSON
             data: $(this).serialize(),
             success: function (response) { // Adicione o parâmetro 'response'
                 if (response.success) {
-                    $('#formNovaEmpresa').modal('hide');
+                    $('#formNovaColaborador').modal('hide');
                     showSwetAlert('success', response.message, {
                         usarTimer: true,
                         tempo: 1500,
@@ -19,7 +19,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Se success for false, mostrar mensagem de erro
-                    mostrarSwetAlert('error', response.message || 'Erro ao adicionar Empresa.', false);
+                    mostrarSwetAlert('error', response.message || 'Erro ao adicionar Colaborador.', false);
                 }
             },
             error: function (xhr, status, error) {
@@ -29,7 +29,7 @@ $(document).ready(function () {
                 try {
                     // Tentar parsear o erro como JSON
                     var errorResponse = JSON.parse(xhr.responseText);
-                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao adicionar Empresa.', false);
+                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao adicionar Colaborador.', false);
                 } catch (e) {
                     // Se não for JSON, mostrar erro genérico
                     mostrarSwetAlert('error', 'Erro de conexão ou servidor.', false);
@@ -42,18 +42,18 @@ $(document).ready(function () {
         });
     });
 
-    ////alterar dados de uma empresa
-    $('#formeditEmpresa').on('submit', function (e) {
+    ////alterar dados de uma colaboradores
+    $('#formeditColaborador').on('submit', function (e) {
         e.preventDefault();
 
         $.ajax({
-            url: 'ajax/empresas-ajax.php?action=update',
+            url: 'ajax/colaboradores-ajax.php?action=update',
             type: 'POST',
             dataType: 'json', // Adicione esta linha para esperar JSON
             data: $(this).serialize(),
             success: function (response) { // Adicione o parâmetro 'response'
                 if (response.success) {
-                    $('#formNovaEmpresa').modal('hide');
+                    $('#formeditColaborador').modal('hide');
                     showSwetAlert('success', response.message, {
                         usarTimer: true,
                         tempo: 1500,
@@ -61,7 +61,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Se success for false, mostrar mensagem de erro
-                    mostrarSwetAlert('error', response.message || 'Erro ao editar Empresa.', false);
+                    mostrarSwetAlert('error', response.message || 'Erro ao editar Colaborador.', false);
                 }
             },
             error: function (xhr, status, error) {
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 try {
                     // Tentar parsear o erro como JSON
                     var errorResponse = JSON.parse(xhr.responseText);
-                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao editar Empresa.', false);
+                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao editar Colaborador.', false);
                 } catch (e) {
                     // Se não for JSON, mostrar erro genérico
                     mostrarSwetAlert('error', 'Erro de conexão ou servidor.', false);
@@ -84,18 +84,18 @@ $(document).ready(function () {
         });
     });
 
-    //// deletar uma empresa não permitindo mais o login
-     $('#formdeleteEmpresa').on('submit', function (e) {
+    //// deletar uma colaboradores não permitindo mais o login
+     $('#formdeleteColaborador').on('submit', function (e) {
         e.preventDefault();
 
         $.ajax({
-            url: 'ajax/empresas-ajax.php?action=delete',
+            url: 'ajax/colaboradores-ajax.php?action=delete',
             type: 'POST',
             dataType: 'json', // Adicione esta linha para esperar JSON
             data: $(this).serialize(),
             success: function (response) { // Adicione o parâmetro 'response'
                 if (response.success) {
-                    $('#formNovaEmpresa').modal('hide');
+                    $('#formdeleteColaborador').modal('hide');
                     showSwetAlert('success', response.message, {
                         usarTimer: true,
                         tempo: 1500,
@@ -103,7 +103,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Se success for false, mostrar mensagem de erro
-                    mostrarSwetAlert('error', response.message || 'Erro ao deletar Empresa.', false);
+                    mostrarSwetAlert('error', response.message || 'Erro ao deletar Colaborador.', false);
                 }
             },
             error: function (xhr, status, error) {
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 try {
                     // Tentar parsear o erro como JSON
                     var errorResponse = JSON.parse(xhr.responseText);
-                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao deletar Empresa.', false);
+                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao deletar Colaborador.', false);
                 } catch (e) {
                     // Se não for JSON, mostrar erro genérico
                     mostrarSwetAlert('error', 'Erro de conexão ou servidor.', false);
@@ -126,12 +126,12 @@ $(document).ready(function () {
         });
     });
 
-    // btneditEmpresaModal
-    $('.btneditEmpresaModal').on('click', function () {
+    // 
+    $('.btneditColaboradorModal').on('click', function () {
         const id = $(this).data('id');
 
         $.ajax({
-            url: 'ajax/empresas-ajax.php',
+            url: 'ajax/colaboradores-ajax.php',
             type: 'GET',
             data: {  // <-- Passa como objeto data
                 action: 'get',
@@ -139,13 +139,13 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.success) {
-                    const nome = response.empresa.nome;
-                    const cnpj = response.empresa.cnpj;
-                    const prefixo = response.empresa.prefixo;
-                    const endereco = response.empresa.endereco;
-                    const telefone = response.empresa.telefone;
-                    const email = response.empresa.email;
-                    const ativa = response.empresa.ativa;
+                    const nome = response.colaborador.nome;
+                    const cnpj = response.colaborador.cnpj;
+                    const prefixo = response.colaborador.prefixo;
+                    const endereco = response.colaborador.endereco;
+                    const telefone = response.colaborador.telefone;
+                    const email = response.colaborador.email;
+                    const ativa = response.colaborador.ativa;
                     // Preenche os campos do modal
                     $('#update_id').val(id);
                     $('#update_nome').val(nome);
@@ -155,10 +155,10 @@ $(document).ready(function () {
                     $('#update_telefone').val(telefone);
                     $('#update_email').val(email);
                     $('#update_ativa').val(ativa);
-                    $('#editEmpresaModals').modal('show');
+                    $('#editColaboradorModals').modal('show');
                 } else {
                     // Se success for false, mostrar mensagem de erro
-                    mostrarSwetAlert('error', response.message || 'Erro ao solicitar Empresa.', false);
+                    mostrarSwetAlert('error', response.message || 'Erro ao solicitar Colaborador.', false);
                 }
             },
             error: function (xhr, status, error) {
@@ -168,7 +168,7 @@ $(document).ready(function () {
                 try {
                     // Tentar parsear o erro como JSON
                     var errorResponse = JSON.parse(xhr.responseText);
-                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao solicitar Empresa.', false);
+                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao solicitar Colaborador.', false);
                 } catch (e) {
                     // Se não for JSON, mostrar erro genérico
                     mostrarSwetAlert('error', 'Erro de conexão ou servidor.', false);
@@ -177,12 +177,12 @@ $(document).ready(function () {
         });
     });
 
-    // btndeleteEmpresaModals
-    $('.btndeleteEmpresaModals').on('click', function () {
+    // btndeleteColaboradorModals
+    $('.btndeleteColaboradorModals').on('click', function () {
         const id = $(this).data('id');
 
         $.ajax({
-            url: 'ajax/empresas-ajax.php',
+            url: 'ajax/colaboradores-ajax.php',
             type: 'GET',
             data: {  // <-- Passa como objeto data
                 action: 'get',
@@ -192,20 +192,20 @@ $(document).ready(function () {
                 if (response.success) {
                     // Preenche os campos do modal
                     
-                    const nome = response.empresa.nome;
-                    const cnpj = response.empresa.cnpj;
-                    const prefixo = response.empresa.prefixo;
-                    const endereco = response.empresa.endereco;
+                    const nome = response.colaborador.nome;
+                    const cnpj = response.colaborador.cnpj;
+                    const prefixo = response.colaborador.prefixo;
+                    const endereco = response.colaborador.endereco;
                     // Preenche os campos do modal
                     $('#update_id').val(id);
                     $('#update_nome').val(nome);
                     $('#update_cnpj').val(cnpj);
                     $("#update_prefixo").val(prefixo);
                     $('#update_endereco').val(endereco);
-                    $('#deleteEmpresaModals').modal('show');
+                    $('#deleteColaboradorModals').modal('show');
                 } else {
                     // Se success for false, mostrar mensagem de erro
-                    mostrarSwetAlert('error', response.message || 'Erro ao solicitar Empresa.', false);
+                    mostrarSwetAlert('error', response.message || 'Erro ao solicitar Colaborador.', false);
                 }
             },
             error: function (xhr, status, error) {
@@ -215,7 +215,7 @@ $(document).ready(function () {
                 try {
                     // Tentar parsear o erro como JSON
                     var errorResponse = JSON.parse(xhr.responseText);
-                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao solicitar Empresa.', false);
+                    mostrarSwetAlert('error', errorResponse.message || 'Erro ao solicitar Colaborador.', false);
                 } catch (e) {
                     // Se não for JSON, mostrar erro genérico
                     mostrarSwetAlert('error', 'Erro de conexão ou servidor.', false);

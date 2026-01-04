@@ -18,7 +18,7 @@ $empresaid = $_SESSION['empresa_id'];
 $database = new Database();
 $pdo = $database->getConnection();
 
-$stmt = $pdo->query("SELECT * FROM colaboradores WHERE ativo = 1 ORDER BY nome ASC");
+$stmt = $pdo->query("SELECT * FROM colaboradores WHERE ativo = 1 AND empresa_id = {$empresaid}  ORDER BY nome ASC");
 $stmt->execute();
 $colaboradores = $stmt->fetchAll();
 
@@ -38,9 +38,9 @@ $colaboradores = $stmt->fetchAll();
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>CNPJ</th>
-                <th>Prefixo</th>
-                <th>E-mail</th>
+                <th>CPF</th>
+                <th>Código</th>
+                <th>Turno</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
@@ -50,16 +50,16 @@ $colaboradores = $stmt->fetchAll();
                 <tr>
                     <td><?php echo $colaborador['id']; ?></td>
                     <td><?php echo htmlspecialchars($colaborador['nome']); ?></td>
-                    <td><?php echo $colaborador['cnpj']; ?></td>
-                    <td><span class="badge bg-warning"><?php echo $colaborador['prefixo']; ?></span></td>
-                    <td><?php echo htmlspecialchars($colaborador['email']); ?></td>
+                    <td><?php echo $colaborador['cpf']; ?></td>
+                    <td><span class="badge bg-warning"><?php echo $colaborador['codigo']; ?></span></td>
+                    <td><?php echo htmlspecialchars($colaborador['turno']); ?></td>
                     <td>
-                        <span class="badge <?php echo $colaborador['ativa'] ? 'bg-success' : 'bg-danger'; ?>">
-                            <?php echo $colaborador['ativa'] ? 'Ativa' : 'Inativa'; ?>
+                        <span class="badge <?php echo $colaborador['ativo'] ? 'bg-success' : 'bg-danger'; ?>">
+                            <?php echo $colaborador['ativo'] ? 'Ativo' : 'Inativo'; ?>
                         </span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-warning btneditColaboradorModal"                              
+                        <button type="button" class="btn btn-sm btn-warning btneditColaboradorModals"                              
                             data-id=<?= $colaborador['id'] ?>
                             >
                             <i class="bi bi-pencil"></i>
@@ -93,41 +93,38 @@ $colaboradores = $stmt->fetchAll();
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="cnpj" class="form-label">CNPJ *</label>
-                            <input type="text" class="form-control cnpj-mask" id="cnpj" name="cnpj" required>
-                            <div class="invalid-feedback">CNPJ inválido</div>
+                            <label for="cpf" class="form-label">CPF *</label>
+                            <input type="text" class="form-control cpf-mask" id="cpf" name="cpf" required>
+                            <div class="invalid-feedback">CPF inválido</div>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="prefixo" class="form-label">Prefixo *</label>
-                            <input type="text" class="form-control uppercase" id="prefixo" name="prefixo" maxlength="10"
+                            <label for="codigo" class="form-label">Código *</label>
+                            <input type="text" class="form-control uppercase" id="codigo" name="codigo" maxlength="10"
                                 required>
                             <div class="invalid-feedback">Máximo 10 caracteres</div>
                             <small class="text-muted">Ex: EMP, ABC, XYZ</small>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email">
+                            <label for="email" class="form-label">Turno</label>
+                            <select class="form-control" id="turno" name="turno">
+                                 <option value="">Selecione o Turno</option>
+                                 <option value="matutino">Matutino</option>
+                                 <option value="vespertino">Vespertino</option>
+                                 <option value="Noturno">Noturno</option>
+                                 <option value="flexivel">Flexível</option>
+                           </select> 
                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="telefone" class="form-label">Telefone</label>
-                            <input type="text" class="form-control tel-mask" id="telefone" name="telefone">
-                        </div>
+                       
 
                         <div class="col-md-6 mb-3">
                             <label for="ativa" class="form-label">Status</label>
                             <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="ativa" name="ativa" value="1"
+                                <input class="form-check-input" type="checkbox" id="ativo" name="ativo" value="1"
                                     checked>
-                                <label class="form-check-label" for="ativa">Ativa</label>
+                                <label class="form-check-label" for="ativo">Ativo</label>
                             </div>
-                        </div>
-
-                        <div class="col-12 mb-3">
-                            <label for="endereco" class="form-label">Endereço</label>
-                            <textarea class="form-control" id="endereco" name="endereco" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -164,44 +161,39 @@ $colaboradores = $stmt->fetchAll();
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="cnpj" class="form-label">CNPJ *</label>
-                            <input type="text" class="form-control cnpj-mask" id="update_cnpj" name="update_cnpj"
+                            <label for="cpf" class="form-label">CPF *</label>
+                            <input type="text" class="form-control cpf-mask" id="update_cpf" name="update_cpf"
                                 required>
-                            <div class="invalid-feedback">CNPJ inválido</div>
+                            <div class="invalid-feedback">CPF inválido</div>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="prefixo" class="form-label">Prefixo *</label>
-                            <input type="text" class="form-control uppercase" id="update_prefixo" name="update_prefixo"
+                            <label for="codigo" class="form-label">Código *</label>
+                            <input type="text" class="form-control uppercase" id="update_codigo" name="update_codigo"
                                 maxlength="10" required>
                             <div class="invalid-feedback">Máximo 10 caracteres</div>
                             <small class="text-muted">Ex: EMP, ABC, XYZ</small>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="update_email" name="update_email">
+                         <div class="col-md-6 mb-3">
+                            <label for="update_turno" class="form-label">Turno</label>
+                            <select class="form-control" id="update_turno" name="update_turno">
+                                 <option value="">Selecione o Turno</option>
+                                 <option value="matutino">Matutino</option>
+                                 <option value="vespertino">Vespertino</option>
+                                 <option value="Noturno">Noturno</option>
+                                 <option value="flexivel">Flexível</option>
+                           </select> 
                         </div>
+                       
 
                         <div class="col-md-6 mb-3">
-                            <label for="telefone" class="form-label">Telefone</label>
-                            <input type="text" class="form-control tel-mask" id="update_telefone"
-                                name="update_telefone">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="ativa" class="form-label">Status</label>
+                            <label for="update_ativo" class="form-label">Status</label>
                             <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="update_ativa" name="update_ativa"
-                                    value="1" checked>
-                                <label class="form-check-label" for="ativa">Ativa</label>
+                                <input class="form-check-input" type="checkbox" id="update_ativo" name="update_ativo" value="1"
+                                    checked>
+                                <label class="form-check-label" for="ativo">Ativo</label>
                             </div>
-                        </div>
-
-                        <div class="col-12 mb-3">
-                            <label for="endereco" class="form-label">Endereço</label>
-                            <textarea class="form-control" id="update_endereco" name="update_endereco"
-                                rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -238,25 +230,20 @@ $colaboradores = $stmt->fetchAll();
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label for="cnpj" class="form-label">CNPJ *</label>
-                            <input type="text" class="form-control cnpj-mask" id="delete_cnpj" name="delete_cnpj"
+                            <label for="cpf" class="form-label">CPF *</label>
+                            <input type="text" class="form-control cpf-mask" id="delete_cpf" name="delete_cpf"
                                 required>
-                            <div class="invalid-feedback">CNPJ inválido</div>
+                            <div class="invalid-feedback">CPF inválido</div>
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label for="prefixo" class="form-label">Prefixo *</label>
-                            <input type="text" class="form-control uppercase" id="delete_prefixo" name="delete_prefixo"
+                            <label for="codigo" class="form-label">Código *</label>
+                            <input type="text" class="form-control uppercase" id="delete_codigo" name="delete_codigo"
                                 maxlength="10" required>
                             <div class="invalid-feedback">Máximo 10 caracteres</div>
                             <small class="text-muted">Ex: EMP, ABC, XYZ</small>
                         </div>
-
-                        <div class="col-12 mb-3">
-                            <label for="endereco" class="form-label">Endereço</label>
-                            <textarea class="form-control" id="delete_endereco" name="delete_endereco"
-                                rows="3"></textarea>
-                        </div>
+                       
                     </div>
                 </div>
                 <div class="modal-footer">

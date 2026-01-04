@@ -53,7 +53,7 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (response) { // Adicione o parâmetro 'response'
                 if (response.success) {
-                    $('#formNovaEmpresa').modal('hide');
+                    $('#formeditEmpresa').modal('hide');
                     showSwetAlert('success', response.message, {
                         usarTimer: true,
                         tempo: 1500,
@@ -95,7 +95,7 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (response) { // Adicione o parâmetro 'response'
                 if (response.success) {
-                    $('#formNovaEmpresa').modal('hide');
+                    $('#formdeleteEmpresa').modal('hide');
                     showSwetAlert('success', response.message, {
                         usarTimer: true,
                         tempo: 1500,
