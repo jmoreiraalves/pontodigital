@@ -40,7 +40,7 @@ $includesPermitidos = [
     'colaboradores-inc',
     'atestado-medico-inc',
     'empresa-inc',
-    'listar-produtos-inc',
+    'abono-de-falta-inc',
     //'grupo-de-impostos-inc',
     'importar-produtos-inc',
     'imprimir-etiquetas-inc',
