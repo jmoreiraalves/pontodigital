@@ -4,32 +4,7 @@ require_once './config/config.php';
 require_once './includes/functions.php';
 require_once 'config/session.php';
 
-// function slugify(string $texto): string
-// {
-//     // 1. Normaliza para UTF-8 e remove acentos
-//     $texto = iconv('UTF-8', 'ASCII//TRANSLIT', $texto);
-
-//     // 2. Remove caracteres não alfanuméricos (mantém espaço e traço)
-//     $texto = preg_replace('/[^a-zA-Z0-9\s-]/', '', $texto);
-
-//     // 3. Substitui espaços em branco por traços
-//     $texto = preg_replace('/[\s]+/', '-', $texto);
-
-//     // 4. Converte para minúsculas
-//     $texto = strtolower($texto);
-
-//     // 5. Remove traços duplicados
-//     $texto = preg_replace('/-+/', '-', $texto);
-
-//     // 6. Remove traços no início/fim
-//     return trim($texto, '-');
-// }
-
 verificarLogin();
-
-//var_dump($_SESSION);
-
-
 
 $user = $_SESSION;
 

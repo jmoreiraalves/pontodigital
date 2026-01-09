@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['LAST_ACTIVITY'] = time();
 
             $cookie_value = base64_encode($usuario['id'] . ':' . $usuario['email'] . ':' . $usuario['empresa_id']);
-                    setcookie('pontodigital_login', $cookie_value, time() + (86400 * 30), "/");
+            setcookie('pontodigital_login', $cookie_value, time() + (86400 * 30), "/");
 
             header("Location: dashboard.php");
             exit();

@@ -23,6 +23,8 @@ $action = $_GET['action'] ?? '';
 $cookie = lerCookieLogin(false);
 $empresaid = $cookie['empresa_id'];
 
+var_dump($cookie);
+
 // Criar uma nova empresa (action=create)
 if ($action === 'create') {
     try {
@@ -214,6 +216,8 @@ elseif ($action === 'get') {
         //         exit;
         //     }
         // }
+
+        var_dump($params);
         
         $stmt = $pdo->prepare("SELECT id, nome, cpf, codigo, turno, ativo, created_at, updated_at 
                              FROM colaboradores 
@@ -222,6 +226,8 @@ elseif ($action === 'get') {
         $stmt->execute($params);
         $colaborador = $stmt->fetch(PDO::FETCH_ASSOC);
         
+         var_dump($colaborador);
+
         if ($colaborador) {
             // Formatar CNPJ para exibição
            // $colaborador['cnpj_formatado'] = formatCnpj($colaborador['cnpj']);

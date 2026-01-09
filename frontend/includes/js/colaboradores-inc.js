@@ -127,8 +127,10 @@ $(document).ready(function () {
     });
 
     // 
-    $('.btneditColaboradorModal').on('click', function () {
+    $('.btneditColaboradorModals').on('click', function () {
         const id = $(this).data('id');
+
+        alert("buscar colaborador");
 
         $.ajax({
             url: 'ajax/colaboradores-ajax.php',

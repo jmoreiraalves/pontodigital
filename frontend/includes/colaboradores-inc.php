@@ -27,9 +27,11 @@ $colaboradores = $stmt->fetchAll();
 ?>
 
 <div class="row">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addColaboradorModals">
-        Novo colaborador
-    </button>
+    <div class="col-md-4 col-sm-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addColaboradorModals">
+            Novo colaborador
+        </button>
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -59,14 +61,12 @@ $colaboradores = $stmt->fetchAll();
                         </span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-warning btneditColaboradorModals"                              
-                            data-id=<?= $colaborador['id'] ?>
-                            >
+                        <button type="button" class="btn btn-sm btn-warning btneditColaboradorModals"
+                            data-id=<?= $colaborador['id'] ?>>
                             <i class="bi bi-pencil"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-danger btndeleteColaboradorModals"
-                            data-id=<?= $colaborador['id'] ?>
-                            >
+                            data-id=<?= $colaborador['id'] ?>>
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -109,14 +109,14 @@ $colaboradores = $stmt->fetchAll();
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Turno</label>
                             <select class="form-control" id="turno" name="turno">
-                                 <option value="">Selecione o Turno</option>
-                                 <option value="matutino">Matutino</option>
-                                 <option value="vespertino">Vespertino</option>
-                                 <option value="Noturno">Noturno</option>
-                                 <option value="flexivel">Flexível</option>
-                           </select> 
+                                <option value="">Selecione o Turno</option>
+                                <option value="matutino">Matutino</option>
+                                <option value="vespertino">Vespertino</option>
+                                <option value="Noturno">Noturno</option>
+                                <option value="flexivel">Flexível</option>
+                            </select>
                         </div>
-                       
+
 
                         <div class="col-md-6 mb-3">
                             <label for="ativa" class="form-label">Status</label>
@@ -162,8 +162,7 @@ $colaboradores = $stmt->fetchAll();
 
                         <div class="col-md-6 mb-3">
                             <label for="cpf" class="form-label">CPF *</label>
-                            <input type="text" class="form-control cpf-mask" id="update_cpf" name="update_cpf"
-                                required>
+                            <input type="text" class="form-control cpf-mask" id="update_cpf" name="update_cpf" required>
                             <div class="invalid-feedback">CPF inválido</div>
                         </div>
 
@@ -175,23 +174,23 @@ $colaboradores = $stmt->fetchAll();
                             <small class="text-muted">Ex: EMP, ABC, XYZ</small>
                         </div>
 
-                         <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="update_turno" class="form-label">Turno</label>
                             <select class="form-control" id="update_turno" name="update_turno">
-                                 <option value="">Selecione o Turno</option>
-                                 <option value="matutino">Matutino</option>
-                                 <option value="vespertino">Vespertino</option>
-                                 <option value="Noturno">Noturno</option>
-                                 <option value="flexivel">Flexível</option>
-                           </select> 
+                                <option value="">Selecione o Turno</option>
+                                <option value="matutino">Matutino</option>
+                                <option value="vespertino">Vespertino</option>
+                                <option value="Noturno">Noturno</option>
+                                <option value="flexivel">Flexível</option>
+                            </select>
                         </div>
-                       
+
 
                         <div class="col-md-6 mb-3">
                             <label for="update_ativo" class="form-label">Status</label>
                             <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="update_ativo" name="update_ativo" value="1"
-                                    checked>
+                                <input class="form-check-input" type="checkbox" id="update_ativo" name="update_ativo"
+                                    value="1" checked>
                                 <label class="form-check-label" for="ativo">Ativo</label>
                             </div>
                         </div>
@@ -231,8 +230,7 @@ $colaboradores = $stmt->fetchAll();
 
                         <div class="col-md-12 mb-3">
                             <label for="cpf" class="form-label">CPF *</label>
-                            <input type="text" class="form-control cpf-mask" id="delete_cpf" name="delete_cpf"
-                                required>
+                            <input type="text" class="form-control cpf-mask" id="delete_cpf" name="delete_cpf" required>
                             <div class="invalid-feedback">CPF inválido</div>
                         </div>
 
@@ -243,7 +241,7 @@ $colaboradores = $stmt->fetchAll();
                             <div class="invalid-feedback">Máximo 10 caracteres</div>
                             <small class="text-muted">Ex: EMP, ABC, XYZ</small>
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="modal-footer">

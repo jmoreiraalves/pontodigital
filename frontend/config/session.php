@@ -26,7 +26,7 @@ function gerarToken($tamanho = 32)
 // Função para ler e decodificar o cookie
 function lerCookieLogin(bool $redirectOnFail = false): ?array
 {
-    if (!isset($_COOKIE['pdvv20_login'])) {
+    if (!isset($_COOKIE['pontodigital_login'])) {
         if ($redirectOnFail) {
             header("Location: logout.php");
             exit;
@@ -34,7 +34,7 @@ function lerCookieLogin(bool $redirectOnFail = false): ?array
         return null;
     }
 
-    $decoded = base64_decode($_COOKIE['pdvv20_login'], true);
+    $decoded = base64_decode($_COOKIE['pontodigital_login'], true);
 
     if ($decoded === false) {
         if ($redirectOnFail) {
@@ -91,7 +91,7 @@ function revalidarUsuario(PDO $pdo, bool $redirectOnFail = false): bool
 
     // Usuário ativo → revalidar cookie (renovar expiração)
     $cookie_value = base64_encode($dados['id'] . ':' . $dados['email'] . ':' . $dados['empresa_id']);
-    setcookie('pdvv20_login', $cookie_value, time() + (86400 * 30), "/");
+    setcookie('pontodigital_login', $cookie_value, time() + (86400 * 30), "/");
 
     return true;
 }
